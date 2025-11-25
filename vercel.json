@@ -3,17 +3,26 @@
   "builds": [
     {
       "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "build" }
+      "use": "@vercel/next"
     },
     {
-      "src": "backend/src/api/**/*.ts",
+      "src": "backend/src/index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
-    { "src": "/api/shorts", "dest": "/backend/src/api/shorts.ts" },
-    { "src": "/api/(.*)", "dest": "/backend/src/api/$1.ts" },
-    { "src": "/(.*)", "dest": "/client/$1" }
-  ]
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/src/index.ts"
+    },
+    {
+      "src": "/health",
+      "dest": "/backend/src/index.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/$1"
+    }
+  ],
+  "outputDirectory": "client/.next"
 }
