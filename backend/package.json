@@ -5,7 +5,6 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "clean": "rimraf dist"
   },

@@ -15,7 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api', apiRoutes);
+// Mount API routes without /api prefix since Vercel routing handles it
+app.use('/', apiRoutes);
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'OK',
@@ -25,10 +26,14 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`Health check available at: http://localhost:${PORT}/health`);
+  });
+}
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-//   console.log(`Health check available at: http://localhost:${PORT}/health`);
-// });
-
-export default serverless(app);
+// Export for serverless
+const handlers = serverless(app);
+export default handlers;
