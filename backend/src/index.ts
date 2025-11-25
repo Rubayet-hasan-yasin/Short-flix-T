@@ -26,9 +26,9 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Health check available at: http://localhost:${PORT}/health`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+//   console.log(`Health check available at: http://localhost:${PORT}/health`);
+// });
 
 export default serverless(app);
