@@ -14,10 +14,11 @@ const api = axios.create({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context: { params: any }
 ) {
   try {
-    const { id } = await params;
+     const { id } = await context.params;
 
     
     // Validate the ID
@@ -32,7 +33,7 @@ export async function POST(
     const response = await api.post(`/shorts/${videoId}/favorite`);
     return NextResponse.json(response.data);
   } catch (error) {
-    console.error(`POST /api/shorts/${params.id}/favorite error:`, error);
+    console.error(`POST /api/shorts/favorite error:`, error);
     
     // Handle axios errors
     if (error && typeof error === 'object' && 'response' in error) {
