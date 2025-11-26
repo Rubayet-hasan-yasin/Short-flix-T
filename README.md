@@ -229,39 +229,6 @@ NODE_ENV=development
 NODE_ENV=production
 ```
 
-## 🚀 Deployment
 
-### Vercel Deployment
-
-1. **Deploy to Vercel**
-   ```bash
-   vercel --prod
-   ```
-
-2. **Set Environment Variables**
-   - Go to Vercel Dashboard → Project Settings → Environment Variables
-   - Add production environment variables
-
-3. **Update API URLs**
-   - Update `NEXT_PUBLIC_API_URL` to your deployed domain
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 👨‍💻 Author
-
-**Rubayet Hasan Yasin**
-- GitHub: [@Rubayet-hasan-yasin](https://github.com/Rubayet-hasan-yasin)
-
----
 
 ⭐ Star this repo if you find it helpful!
