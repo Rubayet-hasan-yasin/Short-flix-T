@@ -1,8 +1,33 @@
+import axios from 'axios';
 import { Video } from '../types/video';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api' 
-  : 'http://localhost:8000/api';
+const API_BASE_URL = '/api';
+  
+
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      console.error('API Error:', error.response.data);
+      throw new Error(error.response.data.message || 'API request failed');
+    } else if (error.request) {
+      console.error('Network Error:', error.request);
+      throw new Error('Network error - please check your connection');
+    } else {
+      console.error('Request Error:', error.message);
+      throw new Error('Request failed');
+    }
+  }
+);
 
 export const fetchShorts = async (searchTerm?: string, tags?: string[]): Promise<Video[]> => {
   const params = new URLSearchParams();
@@ -10,61 +35,28 @@ export const fetchShorts = async (searchTerm?: string, tags?: string[]): Promise
   if (searchTerm) params.append('search', searchTerm);
   if (tags && tags.length > 0) params.append('tags', tags.join(','));
   
-  const url = `${API_BASE_URL}/shorts${params.toString() ? `?${params.toString()}` : ''}`;
+  const response = await api.get<Video[]>(`/shorts${params.toString() ? `?${params.toString()}` : ''}`);
   
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error('Failed to fetch videos');
-  }
-  
-  return response.json();
+  return response.data;
 };
 
 export const createShort = async (video: Omit<Video, 'id'>): Promise<Video> => {
-  const response = await fetch(`${API_BASE_URL}/shorts`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(video),
-  });
-  
-  if (!response.ok) {
-    throw new Error('Failed to create video');
-  }
-  
-  return response.json();
+  const response = await api.post<Video>('/shorts', video);
+  return response.data;
 };
 
 export const toggleFavorite = async (videoId: number): Promise<{ videoId: number; isFavorite: boolean }> => {
-  const response = await fetch(`${API_BASE_URL}/shorts/${videoId}/favorite`, {
-    method: 'POST',
-  });
+  const response = await api.post<{ videoId: number; isFavorite: boolean }>(`/shorts/${videoId}/favorite`);
   
-  if (!response.ok) {
-    throw new Error('Failed to toggle favorite');
-  }
-  
-  return response.json();
+  return response.data;
 };
 
 export const getFavorites = async (): Promise<Video[]> => {
-  const response = await fetch(`${API_BASE_URL}/favorites`);
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch favorites');
-  }
-  
-  return response.json();
+  const response = await api.get<Video[]>('/favorites');
+  return response.data;
 };
 
 export const getFavoriteIds = async (): Promise<number[]> => {
-  const response = await fetch(`${API_BASE_URL}/favorite-ids`);
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch favorite IDs');
-  }
-  
-  const data = await response.json();
-  return data.favoriteIds;
+  const response = await api.get<{ favoriteIds: number[] }>('/favorite-ids');
+  return response.data.favoriteIds;
 };
