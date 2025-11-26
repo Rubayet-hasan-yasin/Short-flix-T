@@ -3,7 +3,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import apiRoutes from './routes/api';
-import serverless from "serverless-http";
 
 dotenv.config();
 
@@ -27,13 +26,13 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // For local development
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log(`Health check available at: http://localhost:${PORT}/health`);
-  });
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+//     console.log(`Health check available at: http://localhost:${PORT}/health`);
+//   });
+// }
 
 // Export for serverless
-const handlers = serverless(app);
-export default handlers;
+// const handlers = serverless(app);
+export default app;
